@@ -50,7 +50,7 @@ public class TwitterUsers extends AppCompatActivity implements AdapterView.OnIte
         try {
 
             ParseQuery<ParseUser> query = ParseUser.getQuery();
-            query.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
+            query.whereNotEqualTo("username", ParseUser.getCurrentUser() .getUsername());
             query.findInBackground(new FindCallback<ParseUser>() {
                 @Override
                 public void done(List<ParseUser> objects, ParseException e) {
@@ -67,8 +67,11 @@ public class TwitterUsers extends AppCompatActivity implements AdapterView.OnIte
                             if (ParseUser.getCurrentUser().getList("fanOf") != null) {
                                 if (ParseUser.getCurrentUser().getList("fanOf").contains(twitterUser)) {
 
+                                    followedUser = followedUser + twitterUser + "\n";
+
                                     listView.setItemChecked(tUsers.indexOf(twitterUser), true);
 
+                                    FancyToast.makeText(TwitterUsers.this, ParseUser.getCurrentUser().getUsername() + "is following" + followedUser, Toast.LENGTH_LONG, FancyToast.INFO, true ).show();
                                 }
                             }
                         }
@@ -123,18 +126,21 @@ public class TwitterUsers extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
+    // Folloe or unfollow
     @Override
     public void onItemClick(AdapterView<?> parent
             , View view, int position, long id) {
 
         CheckedTextView checkedTextView =  (CheckedTextView) view;
 
+        // follow
         if (checkedTextView.isChecked()) {
 
             FancyToast.makeText(TwitterUsers.this, tUsers.get(position) + " is now followed!", Toast.LENGTH_SHORT, FancyToast.INFO, true).show();
             ParseUser.getCurrentUser().add("fanOf", tUsers.get(position));
         } else {
 
+            // unfollow
             FancyToast.makeText(TwitterUsers.this, tUsers.get(position) + " is now unfollowed!", Toast.LENGTH_SHORT, FancyToast.INFO, true).show();
 
             ParseUser.getCurrentUser().getList("fanOf").remove(tUsers.get(position));
@@ -144,6 +150,7 @@ public class TwitterUsers extends AppCompatActivity implements AdapterView.OnIte
 
         }
 
+        //for saving the fanof data
         ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

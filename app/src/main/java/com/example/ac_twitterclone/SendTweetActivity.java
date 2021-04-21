@@ -55,6 +55,7 @@ public class SendTweetActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    //sending tweets
     public void sendTweet(View view) {
 
         ParseObject parseObject = new ParseObject("MyTweet");
@@ -84,11 +85,13 @@ public class SendTweetActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    //viweing tweets
     @Override
     public void onClick(View v) {
 
         final ArrayList<HashMap<String, String>> tweetList = new ArrayList<>();
-        final SimpleAdapter adapter = new SimpleAdapter(SendTweetActivity.this, tweetList, android.R.layout.simple_list_item_2, new String[]{"tweetUserName", "tweetValue"}, new int[]{android.R.id.text1, android.R.id.text2});
+        final SimpleAdapter adapter = new SimpleAdapter(SendTweetActivity.this, tweetList, android.R.layout.simple_list_item_2,
+                new String[]{"tweetUserName", "tweetValue"}, new int[]{android.R.id.text1, android.R.id.text2});
         try {
             ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery("MyTweet");
             parseQuery.whereContainedIn("user", ParseUser.getCurrentUser().getList("fanOf"));
